@@ -1,7 +1,7 @@
 <?php
 
 // Require the correct variable type to be used (no auto-converting)
-declare (strict_types = 1);
+declare(strict_types=1);
 
 // Show errors so we get helpful information
 ini_set('display_errors', '1');
@@ -27,16 +27,20 @@ $action = $_GET['action'] ?? null;
 
 // Load the relevant action
 // This system will help you to only execute the code you want, instead of all of it (or complex if statements)
-switch ($action) {
+$page = $_SERVER['REQUEST_URI'];
+$BASE_PATH = '/becode/3.The-Mountain/07.CRUD/';
+switch ($page) {
+    case $BASE_PATH:
+        overview($cards);
+        break;
     case 'create':
         create();
         break;
     default:
-        overview();
         break;
 }
 
-function overview()
+function overview($cards)
 {
     // Load your view
     // Tip: you can load this dynamically and based on a variable, if you want to load another view

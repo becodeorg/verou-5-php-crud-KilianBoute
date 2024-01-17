@@ -25,8 +25,13 @@ class DatabaseManager
     public function connect(): void
     {
         // TODO: make the connection to the database
-        $dsn = "mysql:host={$this->host};dbname={$this->dbname}";
-        $this->connection =
-            new PDO($dsn, $this->user, $this->password);
+        try {
+            $dsn = "mysql:host={$this->host};dbname={$this->dbname}";
+            $this->connection = new PDO($dsn, $this->user, $this->password);
+            $this->connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $this->connection->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            echo $e->getMessage();
+        }
     }
 }
