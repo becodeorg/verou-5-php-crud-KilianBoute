@@ -33,8 +33,8 @@ switch ($page) {
     case $BASE_PATH:
         overview($cards);
         break;
-    case 'create':
-        create();
+    case $BASE_PATH . 'create':
+        create($databaseManager);
         break;
     default:
         break;
@@ -47,7 +47,24 @@ function overview($cards)
     require 'overview.php';
 }
 
-function create()
+function create($databaseManager)
 {
     // TODO: provide the create logic
+    $name = htmlspecialchars($_POST['card_name']);
+    $primaryType = htmlspecialchars($_POST['$card_primary_type']);
+    $secondaryType = htmlspecialchars($_POST['$card_secondary_type'] ?? null);
+
+    $query = "INSERT INTO cards (name, primary_type, secondary_type) VALUES (:name, :primaryType, :secondaryType)";
+    $statement = $databaseManager->connection->prepare($query);
+    $statement->bindValue(":name", $name, PDO::PARAM_STR);
+    $statement->bindValue(":primaryType", $primaryType, PDO::PARAM_STR);
+    $statement->bindValue(":secondaryType", $secondaryType, PDO::PARAM_STR);
+
+    try {
+        $statement->execute();
+    } catch (PDOException $e) {
+        echo $e->getMessage();
+    }
+
+    header("Location: /becode/3.The-Mountain/07.CRUD");
 }
